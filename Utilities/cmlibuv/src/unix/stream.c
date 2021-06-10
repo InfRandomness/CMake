@@ -840,7 +840,11 @@ start:
 
   if (req->send_handle) {
     int fd_to_send;
+#if defined(__sgi)
+    struct xpg5_msghdr msg;
+#else
     struct msghdr msg;
+#endif
     struct cmsghdr *cmsg;
     union {
       char data[64];
@@ -862,11 +866,16 @@ start:
     msg.msg_namelen = 0;
     msg.msg_iov = iov;
     msg.msg_iovlen = iovcnt;
+#if !defined(__sgi)
     msg.msg_flags = 0;
-
+#endif
+#if defined(__sgi) \
+      /*msg.msg_ctrl = &scratch.alias;
+       msg.msg_ctrllen = CMSG_SPACE(sizeof(fd_to_send));*/
+#else
     msg.msg_control = &scratch.alias;
     msg.msg_controllen = CMSG_SPACE(sizeof(fd_to_send));
-
+#endif
     cmsg = CMSG_FIRSTHDR(&msg);
     cmsg->cmsg_level = SOL_SOCKET;
     cmsg->cmsg_type = SCM_RIGHTS;
@@ -880,7 +889,11 @@ start:
     }
 
     do
+#if defined(__sgi)
+      n = _xpg5_sendmsg(uv__stream_fd(stream), &msg, 0);
+#else
       n = sendmsg(uv__stream_fd(stream), &msg, 0);
+#endif
     while (n == -1 && RETRY_ON_WRITE_ERROR(errno));
 
     /* Ensure the handle isn't sent again in case this is a partial write. */
@@ -1056,8 +1069,11 @@ static int uv__stream_queue_fd(uv_stream_t* stream, int fd) {
 #endif
 #define UV__CMSG_FD_SIZE (UV__CMSG_FD_COUNT * sizeof(int))
 
-
+#if defined(__sgii)
+static int uv__stream_recv_cmsg(uv_stream_t* stream, struct xpg5_msghdr* msg) {
+#else
 static int uv__stream_recv_cmsg(uv_stream_t* stream, struct msghdr* msg) {
+#endif
   struct cmsghdr* cmsg;
 
   for (cmsg = CMSG_FIRSTHDR(msg); cmsg != NULL; cmsg = CMSG_NXTHDR(msg, cmsg)) {
@@ -1116,7 +1132,11 @@ static int uv__stream_recv_cmsg(uv_stream_t* stream, struct msghdr* msg) {
 static void uv__read(uv_stream_t* stream) {
   uv_buf_t buf;
   ssize_t nread;
+#if defined(__sgii)
+  struct xpg5_msghdr msg;
+#else
   struct msghdr msg;
+#endif
   char cmsg_space[CMSG_SPACE(UV__CMSG_FD_SIZE)];
   int count;
   int err;
@@ -1157,15 +1177,21 @@ static void uv__read(uv_stream_t* stream) {
       while (nread < 0 && errno == EINTR);
     } else {
       /* ipc uses recvmsg */
+#if !defined(__sgi)
       msg.msg_flags = 0;
+#endif
       msg.msg_iov = (struct iovec*) &buf;
       msg.msg_iovlen = 1;
       msg.msg_name = NULL;
       msg.msg_namelen = 0;
       /* Set up to receive a descriptor even if one isn't in the message */
+#if defined(__sgi) \
+      /*msg.msg_ctrllen = sizeof(cmsg_space);
+      msg.msg_ctrl = cmsg_space;*/
+#else
       msg.msg_controllen = sizeof(cmsg_space);
       msg.msg_control = cmsg_space;
-
+#endif
       do {
         nread = uv__recvmsg(uv__stream_fd(stream), &msg, 0);
       }

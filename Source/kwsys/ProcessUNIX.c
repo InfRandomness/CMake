@@ -101,6 +101,7 @@ static inline void kwsysProcess_usleep(unsigned int msec)
  */
 #if !defined(__BEOS__) && !defined(__VMS) && !defined(__MINT__) &&            \
   !defined(KWSYSPE_USE_SELECT)
+  !defined(KWSYSPE_USE_SELECT) && !defined(__sgi)
 #  define KWSYSPE_USE_SELECT 1
 #endif
 

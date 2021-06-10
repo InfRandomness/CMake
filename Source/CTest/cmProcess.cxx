@@ -106,7 +106,7 @@ bool cmProcess::StartProcess(uv_loop_t& loop, std::vector<size_t>* affinity)
   options.stdio_count = 3; // in, out and err
   options.exit_cb = &cmProcess::OnExitCB;
   options.stdio = stdio;
-#if !defined(CMAKE_USE_SYSTEM_LIBUV)
+#if !defined(CMAKE_USE_SYSTEM_LIBUV) && !defined(__sgi)
   std::vector<char> cpumask;
   if (affinity && !affinity->empty()) {
     cpumask.resize(static_cast<size_t>(uv_cpumask_size()), 0);

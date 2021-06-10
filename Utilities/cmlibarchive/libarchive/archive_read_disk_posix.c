@@ -2526,7 +2526,7 @@ static const struct stat *
 tree_current_lstat(struct tree *t)
 {
 	if (!(t->flags & hasLstat)) {
-#ifdef HAVE_FSTATAT
+#if defined(HAVE_FSTATAT) && !defined(__sgi)
 		if (fstatat(tree_current_dir_fd(t),
 		    tree_current_access_path(t), &t->lst,
 		    AT_SYMLINK_NOFOLLOW) != 0)

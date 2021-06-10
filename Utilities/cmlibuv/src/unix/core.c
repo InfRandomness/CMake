@@ -592,7 +592,7 @@ int uv__nonblock_ioctl(int fd, int set) {
 }
 
 
-#if !defined(__hpux) && !defined(__CYGWIN__) && !defined(__MSYS__) && !defined(__HAIKU__)
+#if !defined(__hpux) && !defined(__CYGWIN__) && !defined(__MSYS__) && !defined(__HAIKU__) && !defined(__sgi)
 int uv__cloexec_ioctl(int fd, int set) {
   int r;
 
@@ -669,8 +669,11 @@ int uv__cloexec_fcntl(int fd, int set) {
   return 0;
 }
 
-
+#if defined(__sgii)
+ssize_t uv__recvmsg(int fd, struct xpg5_msghdr* msg, int flags) {
+#else
 ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags) {
+#endif
   struct cmsghdr* cmsg;
   ssize_t rc;
   int* pfd;
@@ -690,12 +693,18 @@ ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags) {
   } else {
     rc = recvmsg(fd, msg, flags);
   }
+#elif defined(__sgii)
+  rc = _xpg5_recvmsg(fd, msg, flags);
 #else
   rc = recvmsg(fd, msg, flags);
 #endif
   if (rc == -1)
     return UV__ERR(errno);
+#if defined(__sgi)
+  /* if(msg->msg_ctrllen == 0) */
+#else
   if (msg->msg_controllen == 0)
+#endif
     return rc;
   for (cmsg = CMSG_FIRSTHDR(msg); cmsg != NULL; cmsg = CMSG_NXTHDR(msg, cmsg))
     if (cmsg->cmsg_type == SCM_RIGHTS)

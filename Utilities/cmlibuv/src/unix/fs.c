@@ -518,7 +518,7 @@ done:
 }
 
 
-#if defined(__APPLE__) && !defined(MAC_OS_X_VERSION_10_8)
+#if (defined(__APPLE__) || defined(__sgi)) && !defined(MAC_OS_X_VERSION_10_8)
 #define UV_CONST_DIRENT uv__dirent_t
 #else
 #define UV_CONST_DIRENT const uv__dirent_t
@@ -764,8 +764,12 @@ static ssize_t uv__fs_realpath(uv_fs_t* req) {
 #else
   ssize_t len;
 
+#if defined(__sgi)
+  buf = uv__malloc(PATH_MAX + 1);
+#else
   len = uv__fs_pathmax_size(req->path);
   buf = uv__malloc(len + 1);
+#endif
 
   if (buf == NULL) {
     errno = ENOMEM;

@@ -77,7 +77,7 @@ __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout)
 {
 	pid_t child;
 	int stdin_pipe[2], stdout_pipe[2], tmp;
-#if HAVE_POSIX_SPAWNP
+#if defined(HAVE_POSIX_SPAWNP) && !defined(__sgi)
 	posix_spawn_file_actions_t actions;
 	int r;
 #endif
@@ -106,7 +106,7 @@ __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout)
 		stdout_pipe[1] = tmp;
 	}
 
-#if HAVE_POSIX_SPAWNP
+#if defined(HAVE_POSIX_SPAWNP) && !defined(__sgi)
 
 	r = posix_spawn_file_actions_init(&actions);
 	if (r != 0) {
@@ -179,7 +179,7 @@ __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout)
 
 	return child;
 
-#if HAVE_POSIX_SPAWNP
+#if defined(HAVE_POSIX_SPAWNP) && !defined(__sgi)
 actions_inited:
 	errno = r;
 	posix_spawn_file_actions_destroy(&actions);

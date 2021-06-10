@@ -2,8 +2,8 @@
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software
+   Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,10 +36,10 @@
    private implementation details that can be changed or removed.  */
 
 #ifndef YY_CMEXPR_YY_CMEXPRPARSERTOKENS_H_INCLUDED
-# define YY_CMEXPR_YY_CMEXPRPARSERTOKENS_H_INCLUDED
+#define YY_CMEXPR_YY_CMEXPRPARSERTOKENS_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+#  define YYDEBUG 0
 #endif
 #if YYDEBUG
 extern int cmExpr_yydebug;
@@ -47,35 +47,33 @@ extern int cmExpr_yydebug;
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
-  {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    exp_PLUS = 258,                /* exp_PLUS  */
-    exp_MINUS = 259,               /* exp_MINUS  */
-    exp_TIMES = 260,               /* exp_TIMES  */
-    exp_DIVIDE = 261,              /* exp_DIVIDE  */
-    exp_MOD = 262,                 /* exp_MOD  */
-    exp_SHIFTLEFT = 263,           /* exp_SHIFTLEFT  */
-    exp_SHIFTRIGHT = 264,          /* exp_SHIFTRIGHT  */
-    exp_OPENPARENT = 265,          /* exp_OPENPARENT  */
-    exp_CLOSEPARENT = 266,         /* exp_CLOSEPARENT  */
-    exp_OR = 267,                  /* exp_OR  */
-    exp_AND = 268,                 /* exp_AND  */
-    exp_XOR = 269,                 /* exp_XOR  */
-    exp_NOT = 270,                 /* exp_NOT  */
-    exp_NUMBER = 271               /* exp_NUMBER  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
+#  define YYTOKENTYPE
+enum yytokentype
+{
+  YYEMPTY = -2,
+  YYEOF = 0,             /* "end of file"  */
+  YYerror = 256,         /* error  */
+  YYUNDEF = 257,         /* "invalid token"  */
+  exp_PLUS = 258,        /* exp_PLUS  */
+  exp_MINUS = 259,       /* exp_MINUS  */
+  exp_TIMES = 260,       /* exp_TIMES  */
+  exp_DIVIDE = 261,      /* exp_DIVIDE  */
+  exp_MOD = 262,         /* exp_MOD  */
+  exp_SHIFTLEFT = 263,   /* exp_SHIFTLEFT  */
+  exp_SHIFTRIGHT = 264,  /* exp_SHIFTRIGHT  */
+  exp_OPENPARENT = 265,  /* exp_OPENPARENT  */
+  exp_CLOSEPARENT = 266, /* exp_CLOSEPARENT  */
+  exp_OR = 267,          /* exp_OR  */
+  exp_AND = 268,         /* exp_AND  */
+  exp_XOR = 269,         /* exp_XOR  */
+  exp_NOT = 270,         /* exp_NOT  */
+  exp_NUMBER = 271       /* exp_NUMBER  */
+};
+typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 
-
-
-int cmExpr_yyparse (yyscan_t yyscanner);
+int cmExpr_yyparse(yyscan_t yyscanner);
 
 #endif /* !YY_CMEXPR_YY_CMEXPRPARSERTOKENS_H_INCLUDED  */

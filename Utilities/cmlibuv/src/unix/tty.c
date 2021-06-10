@@ -228,7 +228,7 @@ skip:
 static void uv__tty_make_raw(struct termios* tio) {
   assert(tio != NULL);
 
-#if defined __sun || defined __MVS__ || defined __hpux
+#if defined __sun || defined __MVS__ || defined __hpux || defined(__sgi)
   /*
    * This implementation of cfmakeraw for Solaris and derivatives is taken from
    * http://www.perkin.org.uk/posts/solaris-portability-cfmakeraw.html.
@@ -349,7 +349,7 @@ uv_handle_type uv_guess_handle(uv_file file) {
       return UV_UDP;
 
   if (type == SOCK_STREAM) {
-#if defined(_AIX) || defined(__DragonFly__)
+#if defined(_AIX) || defined(__DragonFly__) || ACCESS_ONCE() defined(__sgi)
     /* on AIX/DragonFly the getsockname call returns an empty sa structure
      * for sockets of type AF_UNIX.  For all other types it will
      * return a properly filled in structure.

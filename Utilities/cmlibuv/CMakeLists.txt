@@ -354,6 +354,40 @@ if(CMAKE_SYSTEM_NAME STREQUAL "QNX")
     )
 endif()
 
+if(CMAKE_SYSTEM_NAME MATCHES "IRIX")
+  list(APPEND uv_libraries dl rt)
+  list(APPEND uv_headers
+    include/uv/posix.h
+    )
+  list(APPEND uv_defines
+    _SGI_SOURCE
+    _SGI_REENTRANT_FUNCTIONS
+    )
+  list(APPEND uv_sources
+    src/unix/irix.c
+    src/unix/no-fsevents.c
+    src/unix/posix-poll.c
+    src/unix/posix-hrtime.c
+    )
+endif()
+
+if(CMAKE_SYSTEM_NAME MATCHES "IRIX")
+  list(APPEND uv_libraries dl rt)
+  list(APPEND uv_headers
+    include/uv/posix.h
+    )
+  list(APPEND uv_defines
+    _SGI_SOURCE
+    _SGI_REENTRANT_FUNCTIONS
+    )
+  list(APPEND uv_sources
+    src/unix/irix.c
+    src/unix/no-fsevents.c
+    src/unix/posix-poll.c
+    src/unix/posix-hrtime.c
+    )
+endif()
+
 include_directories(
   ${uv_includes}
   ${KWSYS_HEADER_ROOT}

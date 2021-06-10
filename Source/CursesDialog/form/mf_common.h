@@ -36,12 +36,13 @@
 #  include <ncurses_cfg.h>
 #endif
 
-#include <stdlib.h>
-#include <sys/types.h>
 #include <assert.h>
-#include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <sys/types.h>
 
 #if DECL_ERRNO
 extern int errno;
@@ -57,31 +58,29 @@ extern int errno;
 #include <nc_alloc.h>
 
 #if USE_RCS_IDS
-#define MODULE_ID(id) static const char Ident[] = id;
+#  define MODULE_ID(id) static const char Ident[] = id;
 #else
-#define MODULE_ID(id) /*nothing*/
+#  define MODULE_ID(id) /*nothing*/
 #endif
-
 
 /* Maximum regular 8-bit character code */
 #define MAX_REGULAR_CHARACTER (0xff)
 
-#define SET_ERROR(code) (errno=(code))
+#define SET_ERROR(code) (errno = (code))
 #define GET_ERROR() (errno)
-#define RETURN(code) return( SET_ERROR(code) )
+#define RETURN(code) return (SET_ERROR(code))
 
 /* The few common values in the status fields for menus and forms */
-#define _POSTED         (0x01)  /* menu or form is posted                  */
-#define _IN_DRIVER      (0x02)  /* menu or form is processing hook routine */
+#define _POSTED (0x01)    /* menu or form is posted                  */
+#define _IN_DRIVER (0x02) /* menu or form is processing hook routine */
 
 /* Call object hook */
-#define Call_Hook( object, handler ) \
-   if ( (object) && ((object)->handler) )\
-   {\
-	(object)->status |= _IN_DRIVER;\
-	(object)->handler(object);\
-	(object)->status &= ~_IN_DRIVER;\
-   }
+#define Call_Hook(object, handler)                                            \
+  if ((object) && ((object)->handler)) {                                      \
+    (object)->status |= _IN_DRIVER;                                           \
+    (object)->handler(object);                                                \
+    (object)->status &= ~_IN_DRIVER;                                          \
+  }
 
 #define INLINE
 

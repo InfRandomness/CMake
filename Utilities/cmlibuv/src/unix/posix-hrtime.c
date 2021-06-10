@@ -19,20 +19,21 @@
  * IN THE SOFTWARE.
  */
 
-#include "uv.h"
 #include "internal.h"
+#include "uv.h"
 
 #if defined(__APPLE__)
 /* Special case for CMake bootstrap: no clock_gettime on macOS < 10.12 */
 
-#ifndef CMAKE_BOOTSTRAP
-#error "This code path meant only for use during CMake bootstrap."
-#endif
+#  ifndef CMAKE_BOOTSTRAP
+#    error "This code path meant only for use during CMake bootstrap."
+#  endif
 
-#include <mach/mach.h>
-#include <mach/mach_time.h>
+#  include <mach/mach.h>
+#  include <mach/mach_time.h>
 
-uint64_t uv__hrtime(uv_clocktype_t type) {
+uint64_t uv__hrtime(uv_clocktype_t type)
+{
   static mach_timebase_info_data_t info;
 
   if ((ACCESS_ONCE(uint32_t, info.numer) == 0 ||
@@ -46,29 +47,35 @@ uint64_t uv__hrtime(uv_clocktype_t type) {
 #elif defined(__hpux)
 /* Special case for CMake bootstrap: no CLOCK_MONOTONIC on HP-UX */
 
-#ifndef CMAKE_BOOTSTRAP
-#error "This code path meant only for use during CMake bootstrap."
-#endif
+#  ifndef CMAKE_BOOTSTRAP
+#    error "This code path meant only for use during CMake bootstrap."
+#  endif
 
-#include <stdint.h>
-#include <time.h>
+#  include <stdint.h>
+#  include <time.h>
 
-uint64_t uv__hrtime(uv_clocktype_t type) {
-  return (uint64_t) gethrtime();
+uint64_t uv__hrtime(uv_clocktype_t type)
+{
+  return (uint64_t)gethrtime();
 }
 
 #else
 
-#include <stdint.h>
-#include <time.h>
+#  include <stdint.h>
+#  include <time.h>
 
-#undef NANOSEC
-#define NANOSEC ((uint64_t) 1e9)
+#  undef NANOSEC
+#  define NANOSEC ((uint64_t)1e9)
 
-uint64_t uv__hrtime(uv_clocktype_t type) {
+uint64_t uv__hrtime(uv_clocktype_t type)
+{
   struct timespec ts;
+#  if defined(__sgi)
+  clock_gettime(CLOCK_SGI_CYCLE, &ts);
+#  else
   clock_gettime(CLOCK_MONOTONIC, &ts);
-  return (((uint64_t) ts.tv_sec) * NANOSEC + ts.tv_nsec);
+#  endif
+    return (((uint64_t)ts.tv_sec) * NANOSEC + ts.tv_nsec);
 }
 
 #endif
