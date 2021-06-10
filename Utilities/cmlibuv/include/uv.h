@@ -778,7 +778,7 @@ UV_EXTERN void uv_tty_set_vterm_state(uv_tty_vtermstate_t state);
 UV_EXTERN int uv_tty_get_vterm_state(uv_tty_vtermstate_t* state);
 
 #ifdef __cplusplus
-extern "C" {
+extern "C++" {
 
 inline int uv_tty_set_mode(uv_tty_t* handle, int mode) {
   return uv_tty_set_mode(handle, static_cast<uv_tty_mode_t>(mode));
@@ -1283,7 +1283,7 @@ UV_EXTERN int uv_os_setenv(const char* name, const char* value);
 UV_EXTERN int uv_os_unsetenv(const char* name);
 
 #ifdef MAXHOSTNAMELEN
-# define UV_MAXHOSTNAMESIZE (MAXHOSTNAMELEN  1)
+# define UV_MAXHOSTNAMESIZE (MAXHOSTNAMELEN + 1)
 #else
   /*
     Fallback for the maximum hostname size, including the null terminator. The
@@ -1706,11 +1706,11 @@ UV_EXTERN int uv_random(uv_loop_t* loop,
                         uv_random_cb cb);
 
 #if defined(IF_NAMESIZE)
-# define UV_IF_NAMESIZE (IF_NAMESIZE  1)
+# define UV_IF_NAMESIZE (IF_NAMESIZE + 1)
 #elif defined(IFNAMSIZ)
-# define UV_IF_NAMESIZE (IFNAMSIZ  1)
+# define UV_IF_NAMESIZE (IFNAMSIZ + 1)
 #else
-# define UV_IF_NAMESIZE (16  1)
+# define UV_IF_NAMESIZE (16 + 1)
 #endif
 
 UV_EXTERN int uv_if_indextoname(unsigned int ifindex,
