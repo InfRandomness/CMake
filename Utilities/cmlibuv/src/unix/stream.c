@@ -834,11 +834,7 @@ start:
 
   if (req->send_handle) {
     int fd_to_send;
-#if defined(__sgi)
-    struct xpg5_msghdr msg;
-#else
     struct msghdr msg;
-#endif
     struct cmsghdr* cmsg;
     union
     {
@@ -861,16 +857,14 @@ start:
     msg.msg_namelen = 0;
     msg.msg_iov = iov;
     msg.msg_iovlen = iovcnt;
+
 #if !defined(__sgi)
     msg.msg_flags = 0;
 #endif
-#if defined(__sgi)
-    /*msg.msg_ctrl = &scratch.alias;
-     msg.msg_ctrllen = CMSG_SPACE(sizeof(fd_to_send));*/
-#else
+
     msg.msg_control = &scratch.alias;
     msg.msg_controllen = CMSG_SPACE(sizeof(fd_to_send));
-#endif
+
     cmsg = CMSG_FIRSTHDR(&msg);
     cmsg->cmsg_level = SOL_SOCKET;
     cmsg->cmsg_type = SCM_RIGHTS;
