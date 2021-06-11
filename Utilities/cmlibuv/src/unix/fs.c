@@ -626,6 +626,9 @@ static int uv__fs_statfs(uv_fs_t* req)
   uv_statfs_t* stat_fs;
 #if defined(__sun) || defined(__MVS__) || defined(__NetBSD__) ||              \
   defined(__HAIKU__) || defined(__QNX__) || defined(__sgi)
+#  if defined(__sgi)
+#    import <sys/statvfs.h>
+#  endif
   struct statvfs buf;
 
   if (0 != statvfs(req->path, &buf))
