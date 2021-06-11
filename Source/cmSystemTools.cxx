@@ -2081,7 +2081,8 @@ unsigned int cmSystemTools::RandomSeed()
   cmsys::ifstream fin;
 #  if !defined(__sgi)
   fin.rdbuf()->pubsetbuf(nullptr, 0); // Unbuffered read.
-#  endif fin.open("/dev/urandom");
+#  endif
+  fin.open("/dev/urandom");
   if (fin.good() && fin.read(seed.bytes, sizeof(seed)) &&
       fin.gcount() == sizeof(seed)) {
     return seed.integer;

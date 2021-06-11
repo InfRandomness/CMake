@@ -694,16 +694,14 @@ ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags)
   } else {
     rc = recvmsg(fd, msg, flags);
   }
-#elif defined(__sgii)
+#elif defined(__sgi)
   rc = _xpg5_recvmsg(fd, msg, flags);
 #else
-rc = recvmsg(fd, msg, flags);
+  rc = recvmsg(fd, msg, flags);
 #endif
   if (rc == -1)
     return UV__ERR(errno);
-#if defined(__sgi)
-    /* if(msg->msg_ctrllen == 0) */
-#else
+#if !defined(__sgi)
   if (msg->msg_controllen == 0)
 #endif
   return rc;
