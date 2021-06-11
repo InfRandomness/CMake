@@ -594,6 +594,7 @@ int uv__nonblock_ioctl(int fd, int set)
   !defined(__HAIKU__) && !defined(__sgi)
 int uv__cloexec_ioctl(int fd, int set)
 {
+#include <sys/filio.h>
   int r;
 
   do
