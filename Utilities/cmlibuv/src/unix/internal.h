@@ -198,11 +198,13 @@ int uv__close(int fd); /* preserves errno */
 int uv__close_nocheckstdio(int fd);
 int uv__close_nocancel(int fd);
 int uv__socket(int domain, int type, int protocol);
+/*
 #if defined(__sgi)
 ssize_t uv__recvmsg(int fd, struct xpg5_msghdr* msg, int flags);
 #else
-ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags);
 #endif
+*/
+ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags);
 void uv__make_close_pending(uv_handle_t* handle);
 int uv__getiovmax(void);
 

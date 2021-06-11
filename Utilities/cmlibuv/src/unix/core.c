@@ -669,11 +669,12 @@ int uv__cloexec_fcntl(int fd, int set)
   return 0;
 }
 
-#if defined(__sgi)
+/*#if defined(__sgi)
 ssize_t uv__recvmsg(int fd, struct xpg5_msghdr* msg, int flags)
 #else
-ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags)
 #endif
+*/
+ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags)
 {
   struct cmsghdr* cmsg;
   ssize_t rc;
@@ -694,8 +695,10 @@ ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags)
   } else {
     rc = recvmsg(fd, msg, flags);
   }
+/*
 #elif defined(__sgi)
   rc = _xpg5_recvmsg(fd, msg, flags);
+*/
 #else
   rc = recvmsg(fd, msg, flags);
 #endif
@@ -704,7 +707,7 @@ ssize_t uv__recvmsg(int fd, struct msghdr* msg, int flags)
 #if !defined(__sgi)
   if (msg->msg_controllen == 0)
 #endif
-  return rc;
+    return rc;
   for (cmsg = CMSG_FIRSTHDR(msg); cmsg != NULL; cmsg = CMSG_NXTHDR(msg, cmsg))
     if (cmsg->cmsg_type == SCM_RIGHTS)
       for (pfd = (int*)CMSG_DATA(cmsg),
