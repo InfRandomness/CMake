@@ -1057,11 +1057,7 @@ static int uv__stream_queue_fd(uv_stream_t* stream, int fd)
 #endif
 #define UV__CMSG_FD_SIZE (UV__CMSG_FD_COUNT * sizeof(int))
 
-#if defined(__sgi)
-static int uv__stream_recv_cmsg(uv_stream_t* stream, struct xpg5_msghdr* msg)
-#else
 static int uv__stream_recv_cmsg(uv_stream_t* stream, struct msghdr* msg)
-#endif
 {
   struct cmsghdr* cmsg;
 
