@@ -43,22 +43,23 @@ do.
 #  define FD_SETSIZE 16384
 #endif
 
-#include <assert.h>    /* assert */
-#include <ctype.h>     /* isspace */
-#include <dirent.h>    /* DIR, dirent */
-#include <errno.h>     /* errno */
-#include <fcntl.h>     /* fcntl */
-#include <signal.h>    /* sigaction */
-#include <stddef.h>    /* ptrdiff_t */
-#include <stdio.h>     /* snprintf */
-#include <stdlib.h>    /* malloc, free */
-#include <string.h>    /* strdup, strerror, memset */
+#include <assert.h> /* assert */
+#include <ctype.h>  /* isspace */
+#include <dirent.h> /* DIR, dirent */
+#include <errno.h>  /* errno */
+#include <fcntl.h>  /* fcntl */
+#include <signal.h> /* sigaction */
+#include <stddef.h> /* ptrdiff_t */
+#include <stdio.h>  /* snprintf */
+#include <stdlib.h> /* malloc, free */
+#include <string.h> /* strdup, strerror, memset */
+#include <time.h>   /* gettimeofday */
+#include <unistd.h> /* pipe, close, fork, execvp, select, _exit */
+
 #include <sys/stat.h>  /* open mode */
 #include <sys/time.h>  /* struct timeval */
 #include <sys/types.h> /* pid_t, fd_set */
 #include <sys/wait.h>  /* waitpid */
-#include <time.h>      /* gettimeofday */
-#include <unistd.h>    /* pipe, close, fork, execvp, select, _exit */
 
 #if defined(__VMS)
 #  define KWSYSPE_VMS_NONBLOCK , O_NONBLOCK
@@ -100,7 +101,6 @@ static inline void kwsysProcess_usleep(unsigned int msec)
  * without select().
  */
 #if !defined(__BEOS__) && !defined(__VMS) && !defined(__MINT__) &&            \
-  !defined(KWSYSPE_USE_SELECT)
   !defined(KWSYSPE_USE_SELECT) && !defined(__sgi)
 #  define KWSYSPE_USE_SELECT 1
 #endif
