@@ -787,7 +787,7 @@ void uv_cond_wait(uv_cond_t* cond, uv_mutex_t* mutex) {
 int uv_cond_timedwait(uv_cond_t* cond, uv_mutex_t* mutex, uint64_t timeout) {
   int r;
   struct timespec ts;
-#if defined(__MVS__) || defined() defined(__sgi)
+#if defined(__MVS__) || defined(__sgi)
   struct timeval tv;
 #endif
 
